@@ -582,6 +582,34 @@ def test_agent(var_Q_circuit, var_Q_bias, env, n_tests, n_actions, delay=1):
 
 # Should add plotting function and KeyboardInterrupt Handler
 
+def run(n_tests):
+	env = gym.make('Deterministic-ShortestPath-4x4-FrozenLake-v0')
+	# env = gym.make('Deterministic-4x4-FrozenLake-v0')
+	n_states, n_actions = env.observation_space.n, env.action_space.n
+	print("NUMBER OF STATES:" + str(n_states))
+	print("NUMBER OF ACTIONS:" + str(n_actions))
+
+	# Initialize Q function approximator variational quantum circuit
+	# initialize weight layers
+
+	with open("VQDQN_Frozen_Lake_NonSlip_Dynamic_Epsilon_RMSPropNO20190628142021_var_Q_circuit.txt", "rb") as fp:
+		var_Q_circuit = pickle.load(fp)
+
+	with open("VQDQN_Frozen_Lake_NonSlip_Dynamic_Epsilon_RMSPropNO20190628142021_var_Q_bias" + ".txt", "rb") as fp:
+		var_Q_bias = pickle.load(fp)
+
+	# with open("_iter_reward" + ".txt", "rb") as fp:
+	# 	iter_reward = pickle.load(fp)
+	
+	test_agent(var_Q_circuit, var_Q_bias, env, n_tests, n_actions)
+
+
+
+
+
+
+
+
 if __name__ =="__main__":
 	alpha = 0.4
 	gamma = 0.999
@@ -589,8 +617,8 @@ if __name__ =="__main__":
 	episodes = 2
 	max_steps = 2500
 	n_tests = 2
-	timestep_reward, iter_index, iter_reward, iter_total_steps , var_Q_circuit, var_Q_bias = deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, render=True, test = True)
-	
+	#timestep_reward, iter_index, iter_reward, iter_total_steps , var_Q_circuit, var_Q_bias = deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, render=True, test = True)
+	run(n_tests=10)
 	print(timestep_reward)
 	
 
@@ -608,7 +636,6 @@ if __name__ =="__main__":
 
 	with open(file_title + "_iter_reward" + ".txt", "wb") as fp:
 			pickle.dump(iter_reward, fp)
-
 
 
 
