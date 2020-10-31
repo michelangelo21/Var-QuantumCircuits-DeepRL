@@ -553,32 +553,32 @@ def deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, render 
 				iter_reward.append(total_reward)
 				iter_total_steps.append(t)
 				break
-	# if render:
-	# 	print(f"Here are the Q values:\n{Q}\nTesting now:")
-	# if test:
-	# 	test_agent(Q, env, n_tests, n_actions)
+	if render:
+		print(f"Here are the Q values:\n{var_Q_circuit}\nTesting now:")
+	if test:
+		test_agent(var_Q_circuit, var_Q_bias, env, n_tests, n_actions)
 	return timestep_reward, iter_index, iter_reward, iter_total_steps, var_Q_circuit, var_Q_bias
 
 
-# def test_agent(Q, env, n_tests, n_actions, delay=1):
-# 	for test in range(n_tests):
-# 		print(f"Test #{test}")
-# 		s = env.reset()
-# 		done = False
-# 		epsilon = 0
-# 		while True:
-# 			time.sleep(delay)
-# 			env.render()
-# 			a = epsilon_greedy(Q, epsilon, n_actions, s, train=True)
-# 			print(f"Chose action {a} for state {s}")
-# 			s, reward, done, info = env.step(a)
-# 			if done:
-# 				if reward > 0:
-# 					print("Reached goal!")
-# 				else:
-# 					print("Shit! dead x_x")
-# 				time.sleep(3)
-# 				break
+def test_agent(var_Q_circuit, var_Q_bias, env, n_tests, n_actions, delay=1):
+	for test in range(n_tests):
+		print(f"Test #{test}")
+		s = env.reset()
+		done = False
+		epsilon = 0
+		while True:
+			time.sleep(delay)
+			env.render()
+			a = epsilon_greedy(var_Q_circuit, var_Q_bias, epsilon, n_actions, s, train=False).item()
+			print(f"Chose action {a} for state {s}")
+			s, reward, done, info = env.step(a)
+			if done:
+				if reward > 0:
+					print("Reached goal!")
+				else:
+					print("Shit! dead x_x")
+				time.sleep(3)
+				break
 
 # Should add plotting function and KeyboardInterrupt Handler
 
@@ -586,10 +586,10 @@ if __name__ =="__main__":
 	alpha = 0.4
 	gamma = 0.999
 	epsilon = 1.
-	episodes = 500
+	episodes = 2
 	max_steps = 2500
 	n_tests = 2
-	timestep_reward, iter_index, iter_reward, iter_total_steps , var_Q_circuit, var_Q_bias = deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, test = False)
+	timestep_reward, iter_index, iter_reward, iter_total_steps , var_Q_circuit, var_Q_bias = deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, render=True, test = True)
 	
 	print(timestep_reward)
 	
