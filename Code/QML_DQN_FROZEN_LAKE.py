@@ -582,6 +582,7 @@ def test_agent(var_Q_circuit, var_Q_bias, env, n_tests, n_actions, delay=1):
 
 # Should add plotting function and KeyboardInterrupt Handler
 
+# run circuit with trained params
 def run(n_tests):
 	env = gym.make('Deterministic-ShortestPath-4x4-FrozenLake-v0')
 	# env = gym.make('Deterministic-4x4-FrozenLake-v0')
@@ -605,37 +606,39 @@ def run(n_tests):
 
 
 
-
-
-
-
-
 if __name__ =="__main__":
 	alpha = 0.4
 	gamma = 0.999
 	epsilon = 1.
-	episodes = 2
+	episodes = 500
 	max_steps = 2500
-	n_tests = 2
-	#timestep_reward, iter_index, iter_reward, iter_total_steps , var_Q_circuit, var_Q_bias = deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, render=True, test = True)
-	run(n_tests=10)
-	print(timestep_reward)
-	
+	n_tests = 10
 
-	## Drawing Training Result ##
-	file_title = 'VQDQN_Frozen_Lake_NonSlip_Dynamic_Epsilon_RMSProp' + datetime.now().strftime("NO%Y%m%d%H%M%S")
-	
-	plotTrainingResultReward(_iter_index = iter_index, _iter_reward = iter_reward, _iter_total_steps = iter_total_steps, _fileTitle = 'Quantum_DQN_Frozen_Lake_NonSlip_Dynamic_Epsilon_RMSProp')
+	train = True
+	run = False
+	if(train):
+		timestep_reward, iter_index, iter_reward, iter_total_steps , var_Q_circuit, var_Q_bias = deep_Q_Learning(alpha, gamma, epsilon, episodes, max_steps, n_tests, render=False, test = False)
+		
+		print(timestep_reward)
+		
 
-	## Saving the model
-	with open(file_title + "_var_Q_circuit" + ".txt", "wb") as fp:
-			pickle.dump(var_Q_circuit, fp)
+		## Drawing Training Result ##
+		file_title = 'VQDQN_Frozen_Lake_NonSlip_Dynamic_Epsilon_RMSProp' + datetime.now().strftime("NO%Y%m%d%H%M%S")
+		
+		plotTrainingResultReward(_iter_index = iter_index, _iter_reward = iter_reward, _iter_total_steps = iter_total_steps, _fileTitle = 'Quantum_DQN_Frozen_Lake_NonSlip_Dynamic_Epsilon_RMSProp')
 
-	with open(file_title + "_var_Q_bias" + ".txt", "wb") as fp:
-			pickle.dump(var_Q_bias, fp)
+		## Saving the model
+		with open(file_title + "_var_Q_circuit" + ".txt", "wb") as fp:
+				pickle.dump(var_Q_circuit, fp)
 
-	with open(file_title + "_iter_reward" + ".txt", "wb") as fp:
-			pickle.dump(iter_reward, fp)
+		with open(file_title + "_var_Q_bias" + ".txt", "wb") as fp:
+				pickle.dump(var_Q_bias, fp)
+
+		with open(file_title + "_iter_reward" + ".txt", "wb") as fp:
+				pickle.dump(iter_reward, fp)
+
+	if(run):
+		run(n_tests)
 
 
 
